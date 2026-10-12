@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Represent a Poisson distribution."""
+"""Module for Poisson distribution."""
 
 
 class Poisson:
-    """Poisson distribution with parameter lambtha."""
+    """Class that represents a poisson distribution."""
 
     def __init__(self, data=None, lambtha=1.):
-        """Initialize from data or a positive lambtha parameter."""
+        """Initialize Poisson distribution."""
         if data is None:
             if lambtha <= 0:
                 raise ValueError("lambtha must be a positive value")
@@ -19,21 +19,22 @@ class Poisson:
             self.lambtha = float(sum(data) / len(data))
 
     def pmf(self, k):
-        """Return the probability mass at k."""
-        if not isinstance(k, int):
-            k = int(k)
+        """Calculates the value of the PMF for a given number of successes."""
+        k = int(k)
         if k < 0:
             return 0
+        e = 2.7182818285
         factorial = 1
-        for value in range(1, k + 1):
-            factorial *= value
-        return (self.lambtha ** k * 2.7182818285 ** (-self.lambtha)
-                / factorial)
+        for i in range(1, k + 1):
+            factorial *= i
+        return ((self.lambtha ** k) * (e ** -self.lambtha)) / factorial
 
     def cdf(self, k):
-        """Return the cumulative probability through k."""
-        if not isinstance(k, int):
-            k = int(k)
+        """Calculates the value of the CDF for a given number of successes."""
+        k = int(k)
         if k < 0:
             return 0
-        return sum(self.pmf(value) for value in range
+        cdf_val = 0
+        for i in range(k + 1):
+            cdf_val += self.pmf(i)
+        return cdf_val
